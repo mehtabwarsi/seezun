@@ -38,7 +38,7 @@ const MainLogin = () => {
 					ButtonColor={Color.white}
 					size="large"
 					ButtonTextColor={TextColor.primaryTextColor}
-					onPress={() => console.log('Sign up')}
+					onPress={() => navigation.push('mobileSignUp')}
 				/>
 			</View>
 
