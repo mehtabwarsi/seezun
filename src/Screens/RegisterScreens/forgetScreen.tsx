@@ -12,35 +12,48 @@ import {
 
 import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {RootStackParamList} from '../../../Navigation';
-import AppHeader from '../../../Components/AppHeader';
-import FormTextInput from '../../../Components/FormTextInput';
-import PrimaryButton from '../../../Components/PrimaryButton';
-import {Color, TextColor} from '../../../Theme/color';
-import {Fonts} from '../../../Theme/fonts';
+import {RootStackParamList} from '../../Navigation';
+import AppHeader from '../../Components/AppHeader';
+import FormTextInput from '../../Components/FormTextInput';
+import PrimaryButton from '../../Components/PrimaryButton';
+import {Color, TextColor} from '../../Theme/color';
+import {Fonts} from '../../Theme/fonts';
 
-const UserNameScreen = () => {
+const ForgotScreen = () => {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
-  const [username, setUserName] = useState<string>('');
+  const [email, setEmail] = useState<string>('');
   const [error, setError] = useState<string>('');
-  const [btnDisable, setBtnDisable] = useState<boolean>(true);
+  const [btnDisable, setBtnDisable] = useState(true);
 
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      setEmail('');
+    });
 
-  const validateUsername = (text: string) => {
+    return unsubscribe;
+  }, [navigation]);
+
+  const handleOnChange = (text: string) => {
     const sanitizedText = text.replace(/\s/g, '');
-    const regex = /^[a-zA-Z]*$/; 
-    
-    if (!regex.test(sanitizedText)) {
-      setError('Only alphabetical characters are allowed. No spaces or numbers.');
-      setBtnDisable(true);
-    } else {
-      setError('');
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{1,}$/;
+
+    if (sanitizedText && error != null) {
       setBtnDisable(false);
+      setEmail(sanitizedText);
     }
-    
-    setUserName(sanitizedText);
+
+    if (emailRegex.test(sanitizedText)) {
+      setError('');
+    } else {
+      setError('Invalid email');
+    }
+  };
+
+  const onSubmit = () => {
+    let otp: number = Math.floor(Math.random() * 9000);
+    navigation.navigate('verifyOtp', {email, otp, screen: 'emailSignUp'});
   };
 
   return (
@@ -52,45 +65,40 @@ const UserNameScreen = () => {
         contentContainerStyle={{flexGrow: 1, backgroundColor: Color.white}}>
         <AppHeader
           HeaderIcon={'backButton'}
-          onHeaderIconButtonPress={() => navigation.replace('mobileSignUp')}
+          onHeaderIconButtonPress={() => navigation.pop()}
         />
 
         <View style={styles.mainContainer}>
           <View style={styles.textContainer}>
-            <Text style={styles.login}>Username</Text>
-            <Text style={styles.subTitle}>Create new username</Text>
+            <Text style={styles.login}>Forgot Password?</Text>
+            <Text style={styles.subTitle}>Enter email to get code</Text>
           </View>
 
           <View style={styles.textFields}>
             <FormTextInput
-              inputValue={username}
+              inputValue={email}
               style={styles.mobileInput}
-              onChangeText={validateUsername}
-              // error={true}
-              // errorText={error}
+              hintText={'Email'}
+              onChangeText={handleOnChange}
+              error={!!error}
+              errorText={error}
             />
-            {error ? <Text style={styles.errorText}>{error}</Text> : null}
           </View>
 
           <View style={styles.subTextContainer}>
             <Text style={styles.subText}>
-              Use of only numeric, alphabetical characters are allowed
-            </Text>
-            <Text style={styles.subText}>
-              No special characters @,#,$,%,&,* can be used
+              We’ll send a four-digit code to the registered email address.
             </Text>
           </View>
         </View>
 
-        {/* Button container */}
         <View style={styles.buttonContainer}>
           <PrimaryButton
-            title="Continue"
+            title="Send code"
             ButtonColor={Color.primaryColor}
             ButtonTextColor={Color.white}
             size={'large'}
-            disable={btnDisable}
-            onPress={() => navigation.push('createPassword')}
+            onPress={onSubmit}
           />
         </View>
       </ScrollView>
@@ -98,7 +106,7 @@ const UserNameScreen = () => {
   );
 };
 
-export default UserNameScreen;
+export default ForgotScreen;
 
 const styles = StyleSheet.create({
   container: {
@@ -121,29 +129,17 @@ const styles = StyleSheet.create({
     fontWeight: '400',
   },
   textFields: {
+    flexDirection: 'row',
+    gap: 12,
     marginTop: 14,
-    rowGap: 16,
+  },
+  countryCodeBox: {
+    width: 84,
+    height: 56,
+    backgroundColor: 'red',
   },
   mobileInput: {
     width: Dimensions.get('window').width / 1.2,
-  },
-  passLogin: {
-    marginTop: 97,
-  },
-  forgetPass: {
-    marginTop: 10,
-    marginLeft: 210,
-  },
-  passloginText: {
-    fontSize: 14,
-    color: TextColor.primaryTextColor,
-    fontFamily: Fonts.TensoreFont,
-    textAlign: 'center',
-  },
-  buttonContainer: {
-    alignItems: 'center',
-    marginTop: 30,
-    marginBottom: 30,
   },
   subTextContainer: {
     marginTop: 8,
@@ -153,9 +149,18 @@ const styles = StyleSheet.create({
     lineHeight: 17,
     color: '#8E8E8E',
   },
-  errorText: {
-    fontSize: 12,
-    color: 'red',
-    marginTop: 4,
+  passLogin: {
+    marginTop: 97,
+  },
+  passloginText: {
+    fontSize: 14,
+    color: TextColor.secondaryTextColor,
+    fontFamily: Fonts.TensoreFont,
+    textAlign: 'center',
+  },
+  buttonContainer: {
+    alignItems: 'center',
+    marginTop: 30,
+    marginBottom: 30,
   },
 });

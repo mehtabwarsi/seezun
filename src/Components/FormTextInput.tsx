@@ -37,8 +37,9 @@ type TextInputProps = {
   readonly errorText?: string | null;
   readonly error?: boolean;
   readonly isPasswordTextFiled?: boolean;
-  readonly keyboardType?: KeyboardTypeOptions | undefined;
+  readonly keyboardType?: KeyboardTypeOptions
   readonly lable?: string;
+  readonly calenderIcon?: boolean;
 };
 
 const FormTextInput = ({
@@ -58,6 +59,7 @@ const FormTextInput = ({
   isPasswordTextFiled,
   ref,
   lable,
+  keyboardType
 }: TextInputProps) => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [passwordValidationMessage, setPasswordValidationMessage] = useState<
@@ -135,6 +137,7 @@ const FormTextInput = ({
             onChangeText={handlePasswordChange}
             onFocus={onFocus}
             value={inputValue}
+            keyboardType={keyboardType}
           />
 
           {isPasswordTextFiled && (

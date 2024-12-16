@@ -9,6 +9,7 @@ import {
   ScrollView,
   Keyboard,
   TouchableOpacity,
+  Image,
 } from 'react-native';
 import {Color, TextColor} from '../../../Theme/color';
 import AppHeader from '../../../Components/AppHeader';
@@ -37,13 +38,16 @@ const MobileLogin = () => {
   const numberRegx = /^[0-9]{10}$/;
 
   const handlePhoneChange = (value: string) => {
-    setPhone(value);
-    setError('');
+   
+    const sanitizedValue = value.replace(/[^0-9]/g, ''); 
+    setPhone(sanitizedValue);  
+    setError(''); 
   };
-
+  
   const validatePhone = () => {
     if (phone === '') {
       setError('Number required');
+     
     } else if (!numberRegx.test(phone)) {
       setError('Phone number must be 10 digits');
     } else {
@@ -55,7 +59,7 @@ const MobileLogin = () => {
     validatePhone();
     if (phone.length === 10) {
       let otp: number = Math.floor(Math.random() * 9000);
-      navigation.navigate('verifyOtp', {phone, otp,screen:'Login'});
+      navigation.navigate('verifyOtp', {phone, otp,screen:'mobileLogin'});
     }
   };
 
@@ -80,7 +84,12 @@ const MobileLogin = () => {
           </View>
 
           <View style={styles.textFields}>
-            <View style={styles.countryCodeBox} />
+
+            <View style={styles.countryCodeBox}>
+                <Image style={styles.flag} source={require('../../../assets/pngs/englandflag.png')}/>
+                <Text style={styles.numberCode}>+44</Text>
+              </View>
+              
             <FormTextInput
               inputValue={phone}
               style={styles.mobileInput}
@@ -90,6 +99,7 @@ const MobileLogin = () => {
               onChangeText={handlePhoneChange}
               error={true}
               errorText={error}
+
             />
           </View>
 
@@ -152,7 +162,22 @@ const styles = StyleSheet.create({
   countryCodeBox: {
     width: 84,
     height: 56,
-    backgroundColor: 'red',
+    // backgroundColor: 'red',
+    borderWidth:1,
+    borderColor:'#D2D2D2',
+    flexDirection:"row",
+    alignItems:'center',
+    justifyContent:'center',
+    gap:8
+  },
+  numberCode:{
+    fontSize:16,
+    fontFamily:Fonts.Gotham
+
+  },
+  flag:{
+    width:24,
+    height:17
   },
   mobileInput: {
     width: Dimensions.get('window').width / 2 + 60,

@@ -47,12 +47,15 @@ const EmailLogin = () => {
 
 
   const handleOnChange = (text: string) => {
+  
+    const sanitizedText = text.replace(/\s/g, '');  
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-    setEmail(text);
-    if (emailRegex.test(text)) {
-      setError('');
+    
+    setEmail(sanitizedText); 
+    if (emailRegex.test(sanitizedText)) {
+      setError(''); 
     } else {
-      setError('Invalid email');
+      setError('Invalid email');  
     }
   };
 
@@ -96,7 +99,7 @@ const EmailLogin = () => {
 
           <TouchableOpacity
             style={styles.forgetPass}
-            onPress={() => navigation.push('emailLogin')}>
+            onPress={() => navigation.push('forgotScreen')}>
             <Text style={styles.passloginText}>Forgot Password?</Text>
           </TouchableOpacity>
 

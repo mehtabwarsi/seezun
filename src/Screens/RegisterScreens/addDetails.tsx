@@ -8,18 +8,17 @@ import {
   Platform,
   ScrollView,
   TouchableOpacity,
+  Image,
 } from 'react-native';
 
 import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import { RootStackParamList } from '../../Navigation';
+import {RootStackParamList} from '../../Navigation';
 import AppHeader from '../../Components/AppHeader';
-import { Color, TextColor } from '../../Theme/color';
+import {Color, TextColor} from '../../Theme/color';
 import FormTextInput from '../../Components/FormTextInput';
 import PrimaryButton from '../../Components/PrimaryButton';
-import { Fonts } from '../../Theme/fonts';
-
-
+import {Fonts, FontSize} from '../../Theme/fonts';
 
 const AddDetails = () => {
   const navigation =
@@ -29,7 +28,6 @@ const AddDetails = () => {
   const [pass, setPass] = useState<string>('');
   const [error, setError] = useState<string>('');
   const [btnDisable, setBtnDisable] = useState<boolean>(false);
-
 
   return (
     <KeyboardAvoidingView
@@ -47,7 +45,6 @@ const AddDetails = () => {
           <View style={styles.textContainer}>
             <Text style={styles.login}>Add details</Text>
           </View>
-
           <View style={styles.textFields}>
             <FormTextInput
               inputValue={email}
@@ -58,19 +55,37 @@ const AddDetails = () => {
               errorText={error}
               lable={'Name'}
             />
+            <Text
+              style={{
+                marginRight: 300,
+              }}>
+              Phone
+            </Text>
+            <View style={styles.mobileContryCode}>
+              <View style={styles.countryCodeBox}>
+                <Image
+                  style={styles.flag}
+                  source={require('../../assets/pngs/englandflag.png')}
+                />
+                <Text style={styles.numberCode}>+44</Text>
+              </View>
+              <FormTextInput
+                style={styles.mobileContry}
+                hintText={'Mobile number'}
+                keyboardType={'phone-pad'}
+                maxLength={10}
+                error={true}
+                errorText={error}
+              />
+            </View>
             <FormTextInput
               inputValue={pass}
               style={styles.mobileInput}
               keyboardType={'default'}
               onChangeText={setPass}
-              lable={'Email'}
-            />
-             <FormTextInput
-              inputValue={pass}
-              style={styles.mobileInput}
-              keyboardType={'default'}
-              onChangeText={setPass}
               lable={'Date of birth'}
+              calenderIcon={true}
+              hintText="DD/MM/YYYY"
             />
           </View>
         </View>
@@ -83,7 +98,7 @@ const AddDetails = () => {
             ButtonTextColor={Color.white}
             size={'large'}
             disable={btnDisable}
-            onPress={() => console.log('email login')}
+            onPress={() => navigation.navigate('homeScreen')}
           />
         </View>
       </ScrollView>
@@ -91,7 +106,7 @@ const AddDetails = () => {
   );
 };
 
-export default AddDetails
+export default AddDetails;
 
 const styles = StyleSheet.create({
   container: {
@@ -104,9 +119,10 @@ const styles = StyleSheet.create({
   },
   textContainer: {},
   login: {
-    fontSize: 24,
+    fontSize: FontSize.L,
     fontFamily: Fonts.TensoreFont,
     fontWeight: '400',
+    marginLeft:10
   },
   subTitle: {
     fontSize: 14,
@@ -116,8 +132,23 @@ const styles = StyleSheet.create({
   textFields: {
     marginTop: 14,
     rowGap: 16,
-    justifyContent:'center',
-    alignItems:'center'
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  mobileContryCode: {
+    flexDirection: 'row',
+    gap: 20,
+  },
+  mobileContry: {
+    width: Dimensions.get('window').width / 1.2 - 100,
+  },
+  numberCode: {
+    fontSize: 16,
+    fontFamily: Fonts.Gotham,
+  },
+  flag: {
+    width: 24,
+    height: 17,
   },
   mobileInput: {
     width: Dimensions.get('window').width / 1.2,
@@ -139,5 +170,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: 30,
     marginBottom: 30,
+  },
+  countryCodeBox: {
+    width: 84,
+    height: 56,
+    // backgroundColor: 'red',
+    borderWidth: 1,
+    borderColor: '#D2D2D2',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 8,
   },
 });

@@ -12,35 +12,48 @@ import {
 
 import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {RootStackParamList} from '../../../Navigation';
+import { RootStackParamList } from '../../../Navigation';
 import AppHeader from '../../../Components/AppHeader';
 import FormTextInput from '../../../Components/FormTextInput';
 import PrimaryButton from '../../../Components/PrimaryButton';
-import {Color, TextColor} from '../../../Theme/color';
-import {Fonts} from '../../../Theme/fonts';
+import { Color, TextColor } from '../../../Theme/color';
+import { Fonts } from '../../../Theme/fonts';
 
-const UserNameScreen = () => {
+
+const CreatePasswordScreen = () => {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
-  const [username, setUserName] = useState<string>('');
+  const [email, setEmail] = useState<string>('');
+  const [pass, setPass] = useState<string>('');
   const [error, setError] = useState<string>('');
-  const [btnDisable, setBtnDisable] = useState<boolean>(true);
+  const [btnDisable, setBtnDisable] = useState<boolean>(false);
 
-
-  const validateUsername = (text: string) => {
-    const sanitizedText = text.replace(/\s/g, '');
-    const regex = /^[a-zA-Z]*$/; 
-    
-    if (!regex.test(sanitizedText)) {
-      setError('Only alphabetical characters are allowed. No spaces or numbers.');
-      setBtnDisable(true);
-    } else {
-      setError('');
+  useEffect(() => {
+    if (email && pass) {
       setBtnDisable(false);
+    } else {
+      setBtnDisable(true);
     }
-    
-    setUserName(sanitizedText);
+  }, [email, pass]);
+
+  useEffect(() => {
+    const unSubsribe = navigation.addListener('focus', () => {
+      setEmail('');
+      setPass('');
+    });
+    return unSubsribe;
+  }, [navigation]);
+
+
+  const handleOnChange = (text: string) => {
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    setEmail(text);
+    if (emailRegex.test(text)) {
+      setError('');
+    } else {
+      setError('Invalid email');
+    }
   };
 
   return (
@@ -52,33 +65,30 @@ const UserNameScreen = () => {
         contentContainerStyle={{flexGrow: 1, backgroundColor: Color.white}}>
         <AppHeader
           HeaderIcon={'backButton'}
-          onHeaderIconButtonPress={() => navigation.replace('mobileSignUp')}
+          onHeaderIconButtonPress={() => navigation.pop()}
         />
 
         <View style={styles.mainContainer}>
           <View style={styles.textContainer}>
-            <Text style={styles.login}>Username</Text>
-            <Text style={styles.subTitle}>Create new username</Text>
+            <Text style={styles.login}>Create Password</Text>
           </View>
 
           <View style={styles.textFields}>
             <FormTextInput
-              inputValue={username}
+              inputValue={email}
               style={styles.mobileInput}
-              onChangeText={validateUsername}
-              // error={true}
-              // errorText={error}
+              keyboardType={'email-address'}
+              onChangeText={handleOnChange}
+              lable='Create new Password'
             />
-            {error ? <Text style={styles.errorText}>{error}</Text> : null}
-          </View>
-
-          <View style={styles.subTextContainer}>
-            <Text style={styles.subText}>
-              Use of only numeric, alphabetical characters are allowed
-            </Text>
-            <Text style={styles.subText}>
-              No special characters @,#,$,%,&,* can be used
-            </Text>
+            <FormTextInput
+              inputValue={pass}
+              style={styles.mobileInput}
+              keyboardType={'default'}
+              isPasswordTextFiled={true}
+              onChangeText={setPass}
+              lable='Confirm password'
+            />
           </View>
         </View>
 
@@ -90,7 +100,7 @@ const UserNameScreen = () => {
             ButtonTextColor={Color.white}
             size={'large'}
             disable={btnDisable}
-            onPress={() => navigation.push('createPassword')}
+            onPress={() => navigation.push('addDetails')}
           />
         </View>
       </ScrollView>
@@ -98,7 +108,7 @@ const UserNameScreen = () => {
   );
 };
 
-export default UserNameScreen;
+export default CreatePasswordScreen
 
 const styles = StyleSheet.create({
   container: {
@@ -144,18 +154,5 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: 30,
     marginBottom: 30,
-  },
-  subTextContainer: {
-    marginTop: 8,
-  },
-  subText: {
-    fontSize: 12,
-    lineHeight: 17,
-    color: '#8E8E8E',
-  },
-  errorText: {
-    fontSize: 12,
-    color: 'red',
-    marginTop: 4,
   },
 });
