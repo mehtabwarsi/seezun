@@ -13,8 +13,8 @@ import {
     Image,
     ImageSourcePropType,
 } from 'react-native';
-import BackButton from '../assets/svgIcons/backButton';
-import HamBurgerIcon from '../assets/svgIcons/humBurger';
+import BackButton from '../../assets/svgIcons/backButton';
+import HamBurgerIcon from '../../assets/svgIcons/humBurger';
 
 enum ICONS {
     HAMBURGER = 'hamburger',

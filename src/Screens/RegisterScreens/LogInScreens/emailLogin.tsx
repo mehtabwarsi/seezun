@@ -12,13 +12,12 @@ import {
 
 import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import { RootStackParamList } from '../../../Navigation';
-import AppHeader from '../../../Components/AppHeader';
-import FormTextInput from '../../../Components/FormTextInput';
-import PrimaryButton from '../../../Components/PrimaryButton';
-import { Color, TextColor } from '../../../Theme/color';
-import { Fonts } from '../../../Theme/fonts';
-
+import {RootStackParamList} from '../../../Navigation';
+import {Color, TextColor} from '../../../Theme/color';
+import {Fonts} from '../../../Theme/fonts';
+import AppHeader from '../../../Components/common/AppHeader';
+import PrimaryButton from '../../../Components/common/PrimaryButton';
+import FormTextInput from '../../../Components/common/FormTextInput';
 
 const EmailLogin = () => {
   const navigation =
@@ -45,17 +44,23 @@ const EmailLogin = () => {
     return unSubsribe;
   }, [navigation]);
 
-
   const handleOnChange = (text: string) => {
-  
-    const sanitizedText = text.replace(/\s/g, '');  
+    const sanitizedText = text.replace(/\s/g, '');
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-    
-    setEmail(sanitizedText); 
+
+    setEmail(sanitizedText);
     if (emailRegex.test(sanitizedText)) {
-      setError(''); 
+      setError('');
     } else {
-      setError('Invalid email');  
+      setError('Invalid email');
+    }
+  };
+
+  const onSubmit = () => {
+    if ((email && pass) == '') {
+      setError('requried');
+    } else {
+      navigation.navigate('verifyOtp', {email,screen:'emailLogin'});
     }
   };
 
@@ -118,7 +123,7 @@ const EmailLogin = () => {
             ButtonTextColor={Color.white}
             size={'large'}
             disable={btnDisable}
-            onPress={() => console.log('email login')}
+            onPress={onSubmit}
           />
         </View>
       </ScrollView>

@@ -14,11 +14,11 @@ import {
 import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamList} from '../../Navigation';
-import AppHeader from '../../Components/AppHeader';
 import {Color, TextColor} from '../../Theme/color';
-import FormTextInput from '../../Components/FormTextInput';
-import PrimaryButton from '../../Components/PrimaryButton';
 import {Fonts, FontSize} from '../../Theme/fonts';
+import PrimaryButton from '../../Components/common/PrimaryButton';
+import FormTextInput from '../../Components/common/FormTextInput';
+import AppHeader from '../../Components/common/AppHeader';
 
 const AddDetails = () => {
   const navigation =
@@ -98,7 +98,7 @@ const AddDetails = () => {
             ButtonTextColor={Color.white}
             size={'large'}
             disable={btnDisable}
-            onPress={() => navigation.navigate('homeScreen')}
+            onPress={() => navigation.navigate('bottomTab',{screen:'Home'})}
           />
         </View>
       </ScrollView>

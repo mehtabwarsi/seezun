@@ -8,13 +8,13 @@ import {
   Keyboard,
 } from 'react-native';
 import {Color, TextColor} from '../../Theme/color';
-import AppHeader from '../../Components/AppHeader';
 import {Fonts} from '../../Theme/fonts';
 import {RouteProp, useNavigation, useRoute} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamList} from '../../Navigation';
-import PrimaryButton from '../../Components/PrimaryButton';
 import Toast from 'react-native-toast-message';
+import PrimaryButton from '../../Components/common/PrimaryButton';
+import AppHeader from '../../Components/common/AppHeader'
 
 const VerifyOtp = () => {
   const navigation =
@@ -49,12 +49,18 @@ const VerifyOtp = () => {
   }, [otp1, otp2, otp3, otp4]);
 
   const onSubmit = () => {
-    if (mergeOtp === otp || mergeOtp === 1234) {
+    if (mergeOtp === 1234) {
       if (screen === 'mobileSignUp') {
         navigation.navigate('username');
       } else {
         if (screen === 'mobileLogin') {
-          navigation.navigate('homeScreen');
+          navigation.navigate('bottomTab', {
+            screen: 'Home',
+          });
+        } else if (screen == 'emailLogin') {
+          navigation.navigate('bottomTab', {
+            screen: 'Home',
+          });
         }
       }
     } else {

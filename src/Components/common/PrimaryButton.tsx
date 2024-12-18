@@ -11,8 +11,8 @@ import {
     DimensionValue,
     ColorValue,
 } from 'react-native';
-import { Color } from '../Theme/color';
-import { Fonts } from '../Theme/fonts';
+import { Fonts } from '../../Theme/fonts';
+import { Color } from '../../Theme/color';
 
 
 enum SIZE {

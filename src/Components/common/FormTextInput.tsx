@@ -14,8 +14,8 @@ import {
   TouchableOpacity,
   KeyboardTypeOptions,
 } from 'react-native';
-import CloseEyeIcon from '../assets/svgIcons/closeEyeIcon';
-import OpenEyeIcon from '../assets/svgIcons/openEyeIcon';
+import CloseEyeIcon from '../../assets/svgIcons/closeEyeIcon';
+import OpenEyeIcon from '../../assets/svgIcons/openEyeIcon';
 
 type TextInputProps = {
   readonly ref?: React.LegacyRef<TextInput> | undefined;

@@ -9,12 +9,12 @@ import {
 import {Color, TextColor} from '../../Theme/color';
 import Logo from '../../assets/svgIcons/logo';
 import {Fonts} from '../../Theme/fonts';
-import PrimaryButton from '../../Components/PrimaryButton';
 import GoogleIcon from '../../assets/svgIcons/google';
 import AppleIcon from '../../assets/svgIcons/appleIcon';
 import {useNavigation} from '@react-navigation/native';
 import {RootStackParamList} from '../../Navigation';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import PrimaryButton from '../../Components/common/PrimaryButton';
 
 const MainLogin = () => {
   const navigation =
@@ -22,7 +22,7 @@ const MainLogin = () => {
   return (
     <View style={styles.container}>
       <View style={styles.logoStyle}>
-        <Logo />
+        <Logo height={64} width={193}/>
       </View>
 
       <View style={styles.mainContainer}>

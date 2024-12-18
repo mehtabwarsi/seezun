@@ -11,13 +11,13 @@ import {
   Image,
 } from 'react-native';
 import {Color, TextColor} from '../../../Theme/color';
-import AppHeader from '../../../Components/AppHeader';
 import {Fonts} from '../../../Theme/fonts';
-import FormTextInput from '../../../Components/FormTextInput';
 import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamList} from '../../../Navigation';
-import PrimaryButton from '../../../Components/PrimaryButton';
+import PrimaryButton from '../../../Components/common/PrimaryButton';
+import AppHeader from '../../../Components/common/AppHeader';
+import FormTextInput from '../../../Components/common/FormTextInput';
 
 const MobileSignUp = () => {
   const navigation =
@@ -67,7 +67,9 @@ const MobileSignUp = () => {
     <KeyboardAvoidingView
       style={{flex: 1}}
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      keyboardVerticalOffset={Platform.OS === 'ios' ? 100 : 0}>
+      keyboardVerticalOffset={Platform.OS === 'ios' ? 100 : 0}
+      
+      >
       <ScrollView
         contentContainerStyle={{flexGrow: 1, backgroundColor: Color.white}}>
         <AppHeader

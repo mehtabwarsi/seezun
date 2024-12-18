@@ -10,13 +10,14 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import {Color, TextColor} from '../../../Theme/color';
-import AppHeader from '../../../Components/AppHeader';
 import {Fonts} from '../../../Theme/fonts';
-import FormTextInput from '../../../Components/FormTextInput';
 import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamList} from '../../../Navigation';
-import PrimaryButton from '../../../Components/PrimaryButton';
+import AppHeader from '../../../Components/common/AppHeader';
+import FormTextInput from '../../../Components/common/FormTextInput';
+import PrimaryButton from '../../../Components/common/PrimaryButton';
+
 
 const EmailSignUp = () => {
   const navigation =

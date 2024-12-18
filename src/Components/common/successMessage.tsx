@@ -1,27 +1,27 @@
 import {StyleSheet, Text, View} from 'react-native';
-import React, { useEffect } from 'react';
-import {Color} from '../Theme/color';
+import React, {useEffect} from 'react';
 import LottieView from 'lottie-react-native';
-import {Fonts, FontSize} from '../Theme/fonts';
-import { useNavigation } from '@react-navigation/native';
-import { RootStackParamList } from '../Navigation';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import {useNavigation} from '@react-navigation/native';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {Color} from '../../Theme/color';
+import {Fonts, FontSize} from '../../Theme/fonts';
+import {RootStackParamList} from '../../Navigation/index';
 
-
-interface props{
-  title:string,
-  subTitle:string,
-  nextScreen:keyof RootStackParamList
+interface props {
+  title?: string;
+  subTitle?: string;
+  nextScreen?: keyof RootStackParamList;
 }
-const SuccessMessage = ({title,subTitle,nextScreen}:props) => {
-  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
-  
+const SuccessMessage = ({title, subTitle, nextScreen}: props) => {
+  const navigation =
+    useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+
   useEffect(() => {
     const timer = setTimeout(() => {
       navigation.navigate(nextScreen);
     }, 2000);
-  
-    return () => clearTimeout(timer)
+
+    return () => clearTimeout(timer);
   }, [navigation, nextScreen]);
 
   return (
@@ -39,7 +39,7 @@ const SuccessMessage = ({title,subTitle,nextScreen}:props) => {
             alignSelf: 'center',
           }}>
           <LottieView
-            source={require('../assets/lottie/Animation - 1734360674365.json')}
+            source={require('../../assets/lottie/Animation - 1734360674365.json')}
             style={{height: 100, width: 100}}
             autoPlay
             loop={true}
@@ -47,10 +47,11 @@ const SuccessMessage = ({title,subTitle,nextScreen}:props) => {
           />
         </View>
       </View>
-      <View style={{
-        marginTop:20,
-        rowGap:10
-      }}>
+      <View
+        style={{
+          marginTop: 20,
+          rowGap: 10,
+        }}>
         <Text style={styles.title}>{title}</Text>
         <Text style={styles.subtitle}>{subTitle}</Text>
       </View>

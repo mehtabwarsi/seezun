@@ -13,11 +13,11 @@ import {
 import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamList} from '../../Navigation';
-import AppHeader from '../../Components/AppHeader';
-import FormTextInput from '../../Components/FormTextInput';
-import PrimaryButton from '../../Components/PrimaryButton';
 import {Color, TextColor} from '../../Theme/color';
 import {Fonts} from '../../Theme/fonts';
+import AppHeader from '../../Components/common/AppHeader';
+import FormTextInput from '../../Components/common/FormTextInput';
+import PrimaryButton from '../../Components/common/PrimaryButton';
 
 const ForgotScreen = () => {
   const navigation =
