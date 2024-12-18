@@ -2,6 +2,7 @@ import {
   Dimensions,
   FlatList,
   Image,
+  ImageBackground,
   ScrollView,
   StatusBar,
   StyleSheet,
@@ -12,25 +13,26 @@ import {
 import React from 'react';
 import {Color, TextColor} from '../../Theme/color';
 import Logo from '../../assets/svgIcons/logo';
-
 import IcBell from '../../assets/svgIcons/IcBell';
 import IcSaved from '../../assets/svgIcons/IcSaved';
 import IcCart from '../../assets/svgIcons/IcCart';
 import {Fonts, FontSize} from '../../Theme/fonts';
 import CatogoryCardView from '../../Components/featureX/catogoryCardView';
-import {data} from '../../tempData';
+import {data, data2} from '../../tempData';
+import ProductCardView from '../../Components/featureX/productCardView';
+import HowToWear from '../../Components/featureX/howWear';
 
 const HomeScreen = () => {
   return (
-    <ScrollView style={styles.scrollView}>
+    <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
       <StatusBar barStyle={'light-content'} backgroundColor={'white'} />
       <View style={styles.container}>
-        {/* logo */}
+        {/* Logo */}
         <View style={styles.logo}>
           <Logo width={125} height={40} />
         </View>
 
-        {/* header logo */}
+        {/* Header Icons */}
         <View style={styles.logoHeaderContainer}>
           <View style={styles.logoHeader}>
             <TouchableOpacity>
@@ -45,19 +47,19 @@ const HomeScreen = () => {
           </View>
         </View>
 
-        {/* images area */}
+        {/* Poster Image */}
         <Image
-          style={styles.postorImageStyle}
+          style={styles.posterImageStyle}
           source={require('../../assets/images/redSareegirl.jpg')}
           resizeMode="contain"
         />
 
-        {/* text area */}
-        <View style={styles.postorTextArea}>
+        {/* Text Area */}
+        <View style={styles.posterTextArea}>
           <View style={styles.textArea}>
-            <Text style={styles.postorText}>Rent.</Text>
-            <Text style={styles.postorText}>Buy.</Text>
-            <Text style={styles.postorText}>Sell.</Text>
+            <Text style={styles.posterText}>Rent.</Text>
+            <Text style={styles.posterText}>Buy.</Text>
+            <Text style={styles.posterText}>Sell.</Text>
           </View>
 
           <View style={styles.columnContainer}>
@@ -67,68 +69,168 @@ const HomeScreen = () => {
             </TouchableOpacity>
           </View>
         </View>
-        {/* end text area */}
 
-        {/* cattogory */}
+        {/* Categories */}
         <View>
-          <View style={{marginVertical: 10, alignItems: 'center'}}>
-            <Text
-              style={{
-                textAlign: 'center',
-                fontSize: FontSize.L,
-                fontFamily: Fonts.TensoreFont,
-                color: TextColor.primaryTextColor,
-              }}>
-              Categories
-            </Text>
-            <View
-              style={{
-                marginTop: 5,
-                borderWidth: 1,
-                borderColor: Color.primaryColor,
-                width: '30%',
-              }}
-            />
+          <View style={styles.sectionHeader}>
+            <Text style={styles.sectionTitle}>Categories</Text>
+            <View style={styles.sectionDivider} />
           </View>
           <FlatList
             scrollEnabled={false}
             numColumns={2}
+            showsVerticalScrollIndicator={false}
             data={data}
-            columnWrapperStyle={{
-              justifyContent: 'center',
-              gap: 20,
-              marginTop: 20,
-            }}
+            columnWrapperStyle={styles.categoryListWrapper}
             renderItem={({item}) => (
               <CatogoryCardView
                 title={item.title}
                 imageSrc={{uri: item.image}}
-                onPress={() => console.log('move to catogey')}
+                onPress={() => console.log('Move to category')}
               />
             )}
           />
 
-          {/* View ALl */}
-          <TouchableOpacity
-            style={{
-              borderColor: Color.primaryColor,
-              borderWidth: 1,
-              width: 'auto',
-              alignSelf: 'center',
-            }}>
-            <Text
-              style={{
-                textAlign: 'center',
-                fontSize: FontSize.M,
-                paddingHorizontal: 10,
-                paddingVertical: 2,
-                fontFamily: Fonts.TensoreFont,
-              }}>
-              View more
-            </Text>
+          {/* View All */}
+          <TouchableOpacity style={styles.viewAllButton}>
+            <Text style={styles.viewAllText}>View more</Text>
           </TouchableOpacity>
-          {/* end view all */}
 
+          {/* Continue Browsing */}
+          <View style={styles.browsingContainer}>
+            <Text style={styles.browsingTitle}>
+              Continue Browsing These Products
+            </Text>
+          </View>
+
+          <View style={styles.productListContainer}>
+            <FlatList
+              horizontal
+              data={data}
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={styles.horizontalProductList}
+              renderItem={({item}) => (
+                <ProductCardView
+                  title={item.title}
+                  imageSrc={{uri: item.image}}
+                  isSaved
+                />
+              )}
+            />
+          </View>
+
+          {/* Top Rented */}
+          <View>
+            <View style={styles.sectionHeader}>
+              <Text style={styles.sectionTitle}>Top Rented</Text>
+              <View style={styles.sectionDivider} />
+            </View>
+            <FlatList
+              horizontal
+              data={data}
+              showsHorizontalScrollIndicator={false}
+              renderItem={({item}) => (
+                <ProductCardView
+                  title={item.title}
+                  imageSrc={{uri: item.image}}
+                  onPress={() => console.log('Top rented')}
+                />
+              )}
+            />
+            <TouchableOpacity style={styles.viewAllButton}>
+              <Text style={styles.viewAllText}>View more</Text>
+            </TouchableOpacity>
+          </View>
+
+          {/* box show */}
+
+          <View
+            style={{
+              width: '100%',
+              height: 170,
+              backgroundColor: Color.tertiaryColor,
+              marginTop: 40,
+              marginBottom: 40,
+              flexDirection: 'row',
+            }}>
+            <View
+              style={{
+                backgroundColor: Color.tertiaryColor,
+                width: '60%',
+                height: 170,
+              }}>
+              <View
+                style={{
+                  margin: 24,
+                }}>
+                <Text
+                  style={{
+                    fontSize: 18,
+                    fontFamily: Fonts.Gotham,
+                    color: TextColor.primaryTextColor,
+                  }}>
+                  Have clothes lying around? Why not put them up for sale
+                </Text>
+                <TouchableOpacity style={{marginTop: 20}}>
+                  <Text
+                    style={{
+                      fontFamily: Fonts.TensoreFont,
+                      fontSize: 18,
+                      color: Color.primaryColor,
+                    }}>
+                    {' '}
+                    Sell now{' '}
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+
+            <Image
+              style={{
+                width: '40%',
+                height: 170,
+              }}
+              source={require('../../assets/pngs/clothsslider.png')}
+              resizeMode={'contain'}
+            />
+          </View>
+
+          <View
+            style={{
+              backgroundColor: Color.tertiaryColor,
+              width: Dimensions.get('screen').width,
+              height: 500,
+              marginBottom:20
+            }}>
+            <View style={[styles.sectionHeader,{marginBottom:20,marginTop:20}]}>
+              <Text style={styles.sectionTitle}>How to wear?</Text>
+              <View style={styles.sectionDivider} />
+            </View>
+            <ImageBackground
+              style={{
+                width: Dimensions.get('screen').width,
+                height: 280,
+                backgroundColor: 'rgba(0, 0, 0, 0.1)',
+              }}
+              source={{
+                uri: 'https://www.realmenrealstyle.com/wp-content/uploads/2024/05/double-breasted-vintage-tan-linen-suit-horn-buttons.jpg',
+              }}></ImageBackground>
+            {/* flatList */}
+            <View>
+              <FlatList
+                data={data2}
+                horizontal={true}
+                contentContainerStyle={{
+                  gap: 20,
+                  marginLeft: 20,
+                  marginTop: 30,
+                }}
+                renderItem={({item, index}) => (
+                  <HowToWear imageSrc={{uri: item.image}} title={item.title} />
+                )}
+              />
+            </View>
+          </View>
         </View>
       </View>
     </ScrollView>
@@ -164,12 +266,12 @@ const styles = StyleSheet.create({
     gap: 17,
     margin: 15,
   },
-  postorImageStyle: {
+  posterImageStyle: {
     width: Dimensions.get('screen').width,
     height: 500,
     marginTop: -40,
   },
-  postorTextArea: {
+  posterTextArea: {
     width: Dimensions.get('window').width,
     height: 170,
     backgroundColor: Color.primaryColor,
@@ -180,16 +282,14 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: 20,
-    width: Dimensions.get('window').width - 1,
     gap: 20,
   },
-  postorText: {
+  posterText: {
     fontSize: 35,
     fontFamily: Fonts.TensoreFont,
     color: Color.white,
   },
   columnContainer: {
-    flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
     flex: 1,
@@ -200,18 +300,64 @@ const styles = StyleSheet.create({
     fontFamily: Fonts.Gotham,
     marginBottom: 10,
   },
-  shopNowText: {
-    fontSize: 18,
-    color: 'black',
-    marginTop: 10,
-    fontFamily: Fonts.TensoreFont,
-    alignSelf: 'center',
-  },
   shopNowButtonStyle: {
     backgroundColor: Color.white,
     paddingHorizontal: 40,
     paddingVertical: 5,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  shopNowText: {
+    fontSize: 18,
+    color: 'black',
+    fontFamily: Fonts.TensoreFont,
+  },
+  sectionHeader: {
+    marginVertical: 10,
+    alignItems: 'center',
+  },
+  sectionTitle: {
+    textAlign: 'center',
+    fontSize: FontSize.L,
+    fontFamily: Fonts.TensoreFont,
+    color: TextColor.primaryTextColor,
+  },
+  sectionDivider: {
+    marginTop: 5,
+    borderWidth: 1,
+    borderColor: Color.primaryColor,
+    width: '30%',
+  },
+  categoryListWrapper: {
+    justifyContent: 'center',
+    gap: 20,
+    marginTop: 20,
+  },
+  viewAllButton: {
+    borderColor: Color.primaryColor,
+    borderWidth: 1,
+    alignSelf: 'center',
+  },
+  viewAllText: {
+    textAlign: 'center',
+    fontSize: FontSize.M,
+    paddingHorizontal: 10,
+    paddingVertical: 2,
+    fontFamily: Fonts.TensoreFont,
+  },
+  browsingContainer: {
+    marginTop: 20,
+    marginLeft: 20,
+  },
+  browsingTitle: {
+    fontSize: FontSize.L,
+    fontFamily: Fonts.TensoreFont,
+  },
+  productListContainer: {
+    backgroundColor: Color.tertiaryColor,
+    marginTop: 20,
+  },
+  horizontalProductList: {
+    marginLeft: 20,
   },
 });

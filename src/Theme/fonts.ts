@@ -5,9 +5,10 @@ const Fonts = {
 };
 
 const FontSize = {
-  L: 24,
+  L: 16,
   M: 14,
   S: 12,
+  XL:24
 };
 
 export {Fonts, FontSize};
