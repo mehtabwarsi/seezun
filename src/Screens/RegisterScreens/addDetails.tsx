@@ -23,11 +23,18 @@ import AppHeader from '../../Components/common/AppHeader';
 const AddDetails = () => {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
-
+  
+  const [name,setName] = useState<string>('')  
   const [email, setEmail] = useState<string>('');
   const [pass, setPass] = useState<string>('');
   const [error, setError] = useState<string>('');
   const [btnDisable, setBtnDisable] = useState<boolean>(false);
+  
+
+  const handleOnChange = (text: string) => {
+    const sanitizedText = text.replace(/\s/g, '');
+    setName(sanitizedText);
+  };
 
   return (
     <KeyboardAvoidingView
@@ -47,10 +54,10 @@ const AddDetails = () => {
           </View>
           <View style={styles.textFields}>
             <FormTextInput
-              inputValue={email}
+              inputValue={name}
               style={styles.mobileInput}
               keyboardType={'email-address'}
-              // onChangeText={handleOnChange}
+              onChangeText={handleOnChange}
               error={true}
               errorText={error}
               lable={'Name'}

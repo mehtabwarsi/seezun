@@ -40,6 +40,7 @@ type TextInputProps = {
   readonly keyboardType?: KeyboardTypeOptions
   readonly lable?: string;
   readonly calenderIcon?: boolean;
+  readonly onBlur?:((e: NativeSyntheticEvent<TextInputFocusEventData>) => void)
 };
 
 const FormTextInput = ({
@@ -59,7 +60,8 @@ const FormTextInput = ({
   isPasswordTextFiled,
   ref,
   lable,
-  keyboardType
+  keyboardType,
+  onBlur
 }: TextInputProps) => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [passwordValidationMessage, setPasswordValidationMessage] = useState<
@@ -138,6 +140,7 @@ const FormTextInput = ({
             onFocus={onFocus}
             value={inputValue}
             keyboardType={keyboardType}
+            onBlur={onBlur}
           />
 
           {isPasswordTextFiled && (

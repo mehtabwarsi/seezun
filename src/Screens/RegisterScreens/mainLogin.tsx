@@ -22,7 +22,7 @@ const MainLogin = () => {
   return (
     <View style={styles.container}>
       <View style={styles.logoStyle}>
-        <Logo height={64} width={193}/>
+        <Logo height={64} width={193} />
       </View>
 
       <View style={styles.mainContainer}>
@@ -57,15 +57,19 @@ const MainLogin = () => {
       </View>
 
       <View style={styles.socialStyle}>
-
-        <TouchableOpacity>
+        <TouchableOpacity
+          style={{
+            borderWidth: 1,
+            padding: 12,
+            borderRadius: 100,
+            borderColor: '#F0F0F0',
+          }}>
           <GoogleIcon />
         </TouchableOpacity>
-				
+
         <TouchableOpacity>
           <AppleIcon />
         </TouchableOpacity>
-
       </View>
     </View>
   );
@@ -129,6 +133,7 @@ const styles = StyleSheet.create({
   socialStyle: {
     marginTop: 20,
     justifyContent: 'center',
+    alignItems: 'center',
     flexDirection: 'row',
     gap: 40,
   },

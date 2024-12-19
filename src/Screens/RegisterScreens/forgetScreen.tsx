@@ -37,23 +37,25 @@ const ForgotScreen = () => {
 
   const handleOnChange = (text: string) => {
     const sanitizedText = text.replace(/\s/g, '');
-    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{1,}$/;
+    setEmail(sanitizedText);
+    setBtnDisable(false)
+  };
 
-    if (sanitizedText && error != null) {
-      setBtnDisable(false);
-      setEmail(sanitizedText);
-    }
-
-    if (emailRegex.test(sanitizedText)) {
-      setError('');
+  const handleOnBlur = () => {
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    if (!emailRegex.test(email)) {
+      setError('Invalid email format');
     } else {
-      setError('Invalid email');
+      
     }
   };
 
   const onSubmit = () => {
-    let otp: number = Math.floor(Math.random() * 9000);
-    navigation.navigate('verifyOtp', {email, otp, screen: 'emailSignUp'});
+    if (email == '') {
+      setError('All fields are required');
+    } else {
+      navigation.navigate('verifyOtp', {email, screen: 'emailLogin'});
+    }
   };
 
   return (
@@ -82,6 +84,7 @@ const ForgotScreen = () => {
               onChangeText={handleOnChange}
               error={!!error}
               errorText={error}
+              onBlur={handleOnBlur}
             />
           </View>
 
@@ -98,6 +101,7 @@ const ForgotScreen = () => {
             ButtonColor={Color.primaryColor}
             ButtonTextColor={Color.white}
             size={'large'}
+             disable={btnDisable}
             onPress={onSubmit}
           />
         </View>

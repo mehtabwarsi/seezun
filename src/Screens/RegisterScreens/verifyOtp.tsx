@@ -6,15 +6,16 @@ import {
   TextInput,
   KeyboardAvoidingView,
   Keyboard,
+  Platform,
 } from 'react-native';
 import {Color, TextColor} from '../../Theme/color';
-import {Fonts} from '../../Theme/fonts';
+import {Fonts, FontSize} from '../../Theme/fonts';
 import {RouteProp, useNavigation, useRoute} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamList} from '../../Navigation';
 import Toast from 'react-native-toast-message';
 import PrimaryButton from '../../Components/common/PrimaryButton';
-import AppHeader from '../../Components/common/AppHeader'
+import AppHeader from '../../Components/common/AppHeader';
 
 const VerifyOtp = () => {
   const navigation =
@@ -37,6 +38,7 @@ const VerifyOtp = () => {
   const [otp4, setOtp4] = useState('');
 
   const [btnDisable, setBtnDisable] = useState(true);
+  const [focusedInput, setFocusedInput] = useState<number | null>(null);
 
   const mergeOtp = Number(otp1 + otp2 + otp3 + otp4);
 
@@ -98,57 +100,114 @@ const VerifyOtp = () => {
         <Text>+44 {phone}</Text>
       </View>
 
-      <KeyboardAvoidingView style={{flex: 1}}>
+      <KeyboardAvoidingView
+        style={{flex: 1}}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        keyboardVerticalOffset={Platform.OS === 'ios' ? 100 : 0}>
         <View style={styles.textInputContainer}>
           <TextInput
-            style={styles.otpTextFiledStyle}
+            style={[
+              styles.otpTextFiledStyle,
+              otp1 != '' && {
+                borderBottomWidth: 2,
+              },
+            ]}
             keyboardType={'number-pad'}
             value={otp1}
             maxLength={1}
             ref={otpRef1}
+            onFocus={() => setFocusedInput(1)}
+            onBlur={() => setFocusedInput(null)}
             onChangeText={otp => {
-              if (otp != '') {
-                setOtp1(otp);
+              const sanitized = otp.replace(/[^0-9]/g, '');
+              if (sanitized) {
+                setOtp1(sanitized);
+                otpRef2.current?.focus();
+              }
+            }}
+            onKeyPress={({nativeEvent: {key}}) => {
+              if (key === 'Backspace') {
+                setOtp1('');
+              }
+            }}
+          />
+          <TextInput
+            style={[
+              styles.otpTextFiledStyle,
+              otp2 != '' && {
+                borderBottomWidth: 2,
+              },
+            ]}
+            keyboardType={'number-pad'}
+            value={otp2}
+            maxLength={1}
+            ref={otpRef2}
+            onFocus={() => setFocusedInput(1)}
+            onBlur={() => setFocusedInput(null)}
+            onChangeText={otp => {
+              const sanitized = otp.replace(/[^0-9]/g, '');
+              if (sanitized) {
+                setOtp2(sanitized);
+                otpRef3.current?.focus();
+              }
+            }}
+            onKeyPress={({nativeEvent: {key}}) => {
+              if (key === 'Backspace') {
+                setOtp2('');
+                otpRef1.current?.focus();
+              }
+            }}
+          />
+          <TextInput
+            style={[
+              styles.otpTextFiledStyle,
+              otp3 != '' && {
+                borderBottomWidth: 2,
+              },
+            ]}
+            keyboardType={'number-pad'}
+            value={otp3}
+            maxLength={1}
+            ref={otpRef3}
+            onFocus={() => setFocusedInput(1)}
+            onBlur={() => setFocusedInput(null)}
+            onChangeText={otp => {
+              const sanitized = otp.replace(/[^0-9]/g, '');
+              if (sanitized) {
+                setOtp3(sanitized);
+                otpRef4.current?.focus();
+              }
+            }}
+            onKeyPress={({nativeEvent: {key}}) => {
+              if (key === 'Backspace') {
+                setOtp3('');
                 otpRef2.current?.focus();
               }
             }}
           />
           <TextInput
-            style={styles.otpTextFiledStyle}
-            keyboardType={'number-pad'}
-            value={otp2}
-            maxLength={1}
-            ref={otpRef2}
-            onChangeText={otp => {
-              if (otp != '') {
-                setOtp2(otp);
-                otpRef3.current?.focus();
-              }
-            }}
-          />
-          <TextInput
-            style={styles.otpTextFiledStyle}
-            keyboardType={'number-pad'}
-            value={otp3}
-            maxLength={1}
-            ref={otpRef3}
-            onChangeText={otp => {
-              if (otp != '') {
-                setOtp3(otp);
-                otpRef4.current?.focus();
-              }
-            }}
-          />
-          <TextInput
-            style={styles.otpTextFiledStyle}
+            style={[
+              styles.otpTextFiledStyle,
+              otp3 != '' && {
+                borderBottomWidth: 2,
+              },
+            ]}
             keyboardType={'number-pad'}
             value={otp4}
             maxLength={1}
             ref={otpRef4}
+            onFocus={() => setFocusedInput(1)}
+            onBlur={() => setFocusedInput(null)}
             onChangeText={otp => {
-              if (otp != '') {
-                setOtp4(otp);
-                // otpRef2.current?.focus();
+              const sanitized = otp.replace(/[^0-9]/g, '');
+              if (sanitized) {
+                setOtp4(sanitized);
+              }
+            }}
+            onKeyPress={({nativeEvent: {key}}) => {
+              if (key === 'Backspace') {
+                setOtp4('');
+                otpRef3.current?.focus();
               }
             }}
           />
@@ -196,7 +255,13 @@ const styles = StyleSheet.create({
   otpTextFiledStyle: {
     width: 30,
     borderBottomWidth: 1,
-    color: 'Black',
+    borderColor: 'black',
+    color: 'black',
+    fontSize: FontSize.L,
+    fontFamily: Fonts.Gotham,
+    textAlign: 'center',
+    fontWeight: 'semibold',
+    marginBottom: 20,
   },
   textInputContainer: {
     flex: 1,

@@ -29,7 +29,7 @@ const EmailLogin = () => {
   const [btnDisable, setBtnDisable] = useState<boolean>(false);
 
   useEffect(() => {
-    if (email && pass) {
+    if (email && pass && error == '') {
       setBtnDisable(false);
     } else {
       setBtnDisable(true);
@@ -46,21 +46,23 @@ const EmailLogin = () => {
 
   const handleOnChange = (text: string) => {
     const sanitizedText = text.replace(/\s/g, '');
-    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-
     setEmail(sanitizedText);
-    if (emailRegex.test(sanitizedText)) {
-      setError('');
+  };
+
+  const handleOnBlur = () => {
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    if (!emailRegex.test(email)) {
+      setError('Invalid email format');
     } else {
-      setError('Invalid email');
+      setError('');
     }
   };
 
   const onSubmit = () => {
-    if ((email && pass) == '') {
-      setError('requried');
+    if (email === '' || pass === '') {
+      setError('All fields are required');
     } else {
-      navigation.navigate('verifyOtp', {email,screen:'emailLogin'});
+      navigation.navigate('verifyOtp', {email, screen: 'emailLogin'});
     }
   };
 
@@ -90,6 +92,7 @@ const EmailLogin = () => {
               keyboardType={'email-address'}
               onChangeText={handleOnChange}
               error={true}
+              onBlur={handleOnBlur}
               errorText={error}
             />
             <FormTextInput

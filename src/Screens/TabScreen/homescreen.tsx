@@ -20,7 +20,11 @@ import {Fonts, FontSize} from '../../Theme/fonts';
 import CatogoryCardView from '../../Components/featureX/catogoryCardView';
 import {data, data2} from '../../tempData';
 import ProductCardView from '../../Components/featureX/productCardView';
-import HowToWear from '../../Components/featureX/howWear';
+import HowToWear from '../../Components/featureX/homeScreenComponets/howWear';
+import FreshFromToday from '../../Components/featureX/homeScreenComponets/freshFromToday';
+import IcPlay from '../../assets/svgIcons/IcPlay';
+import Video from 'react-native-video';
+import VideoPlay from '../../Components/featureX/homeScreenComponets/VideoPlay';
 
 const HomeScreen = () => {
   return (
@@ -194,42 +198,25 @@ const HomeScreen = () => {
               resizeMode={'contain'}
             />
           </View>
-
+          {/* image background how to wear */}
           <View
             style={{
               backgroundColor: Color.tertiaryColor,
               width: Dimensions.get('screen').width,
               height: 500,
-              marginBottom:20
+              marginBottom: 20,
             }}>
-            <View style={[styles.sectionHeader,{marginBottom:20,marginTop:20}]}>
-              <Text style={styles.sectionTitle}>How to wear?</Text>
-              <View style={styles.sectionDivider} />
-            </View>
-            <ImageBackground
-              style={{
-                width: Dimensions.get('screen').width,
-                height: 280,
-                backgroundColor: 'rgba(0, 0, 0, 0.1)',
-              }}
-              source={{
-                uri: 'https://www.realmenrealstyle.com/wp-content/uploads/2024/05/double-breasted-vintage-tan-linen-suit-horn-buttons.jpg',
-              }}></ImageBackground>
-            {/* flatList */}
-            <View>
-              <FlatList
-                data={data2}
-                horizontal={true}
-                contentContainerStyle={{
-                  gap: 20,
-                  marginLeft: 20,
-                  marginTop: 30,
-                }}
-                renderItem={({item, index}) => (
-                  <HowToWear imageSrc={{uri: item.image}} title={item.title} />
-                )}
-              />
-            </View>
+            <VideoPlay/>
+          </View>
+          {/* fresh from today  */}
+
+          <View>
+            <FlatList
+              data={data}
+              scrollEnabled={false}
+              numColumns={3}
+              renderItem={({item}) => <FreshFromToday image={item.image} />}
+            />
           </View>
         </View>
       </View>
