@@ -42,7 +42,9 @@ const AddDetails = () => {
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       keyboardVerticalOffset={Platform.OS === 'ios' ? 100 : 0}>
       <ScrollView
-        contentContainerStyle={{flexGrow: 1, backgroundColor: Color.white}}>
+        contentContainerStyle={{flexGrow: 1, backgroundColor: Color.white}}
+        keyboardShouldPersistTaps="always"
+        >
         <AppHeader
           HeaderIcon={'backButton'}
           onHeaderIconButtonPress={() => navigation.pop()}

@@ -7,6 +7,7 @@ import {
   KeyboardAvoidingView,
   Keyboard,
   Platform,
+  ScrollView
 } from 'react-native';
 import {Color, TextColor} from '../../Theme/color';
 import {Fonts, FontSize} from '../../Theme/fonts';
@@ -22,13 +23,13 @@ const VerifyOtp = () => {
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const route = useRoute<RouteProp<RootStackParamList, 'mobileLogin'>>();
 
-  const {phone, otp, screen}: any = route.params;
+  const {phone, otpConfirmData, screen}: any = route.params;
+  
+  console.log(otpConfirmData)
 
-  console.log(`routs scrrn: ${screen}`);
-  console.log(`routs otp: ${otp}`);
 
   const otpRef1 = useRef<TextInput>(null);
-  const otpRef2 = useRef<TextInput>(null);
+  const otpRef2 = useRef<TextInput>(null); 
   const otpRef3 = useRef<TextInput>(null);
   const otpRef4 = useRef<TextInput>(null);
 
@@ -38,7 +39,6 @@ const VerifyOtp = () => {
   const [otp4, setOtp4] = useState('');
 
   const [btnDisable, setBtnDisable] = useState(true);
-  const [focusedInput, setFocusedInput] = useState<number | null>(null);
 
   const mergeOtp = Number(otp1 + otp2 + otp3 + otp4);
 
@@ -102,8 +102,11 @@ const VerifyOtp = () => {
 
       <KeyboardAvoidingView
         style={{flex: 1}}
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        keyboardVerticalOffset={Platform.OS === 'ios' ? 100 : 0}>
+        // behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        // keyboardVerticalOffset={Platform.OS === 'ios' ? 100 : 0}
+         
+        
+        >
         <View style={styles.textInputContainer}>
           <TextInput
             style={[
@@ -116,8 +119,6 @@ const VerifyOtp = () => {
             value={otp1}
             maxLength={1}
             ref={otpRef1}
-            onFocus={() => setFocusedInput(1)}
-            onBlur={() => setFocusedInput(null)}
             onChangeText={otp => {
               const sanitized = otp.replace(/[^0-9]/g, '');
               if (sanitized) {
@@ -142,8 +143,6 @@ const VerifyOtp = () => {
             value={otp2}
             maxLength={1}
             ref={otpRef2}
-            onFocus={() => setFocusedInput(1)}
-            onBlur={() => setFocusedInput(null)}
             onChangeText={otp => {
               const sanitized = otp.replace(/[^0-9]/g, '');
               if (sanitized) {
@@ -169,8 +168,6 @@ const VerifyOtp = () => {
             value={otp3}
             maxLength={1}
             ref={otpRef3}
-            onFocus={() => setFocusedInput(1)}
-            onBlur={() => setFocusedInput(null)}
             onChangeText={otp => {
               const sanitized = otp.replace(/[^0-9]/g, '');
               if (sanitized) {
@@ -196,8 +193,6 @@ const VerifyOtp = () => {
             value={otp4}
             maxLength={1}
             ref={otpRef4}
-            onFocus={() => setFocusedInput(1)}
-            onBlur={() => setFocusedInput(null)}
             onChangeText={otp => {
               const sanitized = otp.replace(/[^0-9]/g, '');
               if (sanitized) {

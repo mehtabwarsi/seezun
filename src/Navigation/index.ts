@@ -2,7 +2,7 @@ import  type { NavigatorScreenParams } from "@react-navigation/native";
 export type RootStackParamList = {
   mainLogin: undefined;
   mobileLogin: undefined;
-  verifyOtp: {phone?: string; otp?: number; screen?: string; email?: string};
+  verifyOtp: {phone?: string; otpConfirmData?: null; screen?: string; email?: string};
   emailLogin: undefined;
   mobileSignUp: undefined;
   username: undefined;
@@ -19,5 +19,5 @@ export type BottomTabParamList = {
   Search: undefined;
   List: undefined;
   Message: undefined;
-  Profile: undefined;
+  Profile: undefined; 
 };

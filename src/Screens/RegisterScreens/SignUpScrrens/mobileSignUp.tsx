@@ -71,10 +71,12 @@ const MobileSignUp = () => {
       
       >
       <ScrollView
-        contentContainerStyle={{flexGrow: 1, backgroundColor: Color.white}}>
+        contentContainerStyle={{flexGrow: 1, backgroundColor: Color.white}}
+        keyboardShouldPersistTaps="always"
+        >
         <AppHeader
           HeaderIcon={'backButton'}
-          onHeaderIconButtonPress={() => navigation.pop()}
+          onHeaderIconButtonPress={() => navigation.navigate('mainLogin')}
         />
 
         <View style={styles.mainContainer}>

@@ -28,7 +28,7 @@ type getSizeType = {
     width: DimensionValue
 }
 type ButtonProps = {
-    readonly onPress: (event: GestureResponderEvent) => void;
+    readonly onPress: (event: GestureResponderEvent) => any;
     readonly onPressIn?: (event: GestureResponderEvent) => void;
     readonly onPressOut?: (event: GestureResponderEvent) => void;
     readonly onLongPress?: (event: GestureResponderEvent) => void;

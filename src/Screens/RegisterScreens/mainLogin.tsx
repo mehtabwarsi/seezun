@@ -1,10 +1,12 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
   StyleSheet,
   Dimensions,
   TouchableOpacity,
+  Platform,
+  ActivityIndicator,
 } from 'react-native';
 import {Color, TextColor} from '../../Theme/color';
 import Logo from '../../assets/svgIcons/logo';
@@ -15,10 +17,55 @@ import {useNavigation} from '@react-navigation/native';
 import {RootStackParamList} from '../../Navigation';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import PrimaryButton from '../../Components/common/PrimaryButton';
+import {Config} from '../../config';
+
+import {
+  GoogleSignin,
+  statusCodes,
+  isErrorWithCode,
+  isSuccessResponse,
+  isNoSavedCredentialFoundResponse,
+} from '@react-native-google-signin/google-signin';
 
 const MainLogin = () => {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+
+  const [userData, setUserData] = useState<Object>({});
+
+  console.log(JSON.stringify(userData));
+
+  useEffect(() => {
+    GoogleSignin.configure({
+      webClientId: Config.WEB_ID,
+      // scopes: ['profile', 'email'],
+    });
+  }, []);
+
+  const googleSignIn = async () => {
+    try {
+      await GoogleSignin.hasPlayServices({showPlayServicesUpdateDialog: true});
+      const response = await GoogleSignin.signIn();
+
+      if (isSuccessResponse(response)) {
+        setUserData(response.data);
+        console.log(response)
+      }
+    } catch (error) {
+      console.log(error)
+      if (isErrorWithCode(error)) {
+        switch (error.code) {
+          case statusCodes.IN_PROGRESS:
+            return (
+              <View>
+                <ActivityIndicator size={'large'} />
+              </View>
+            );
+        }
+      }
+    }
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.logoStyle}>
@@ -58,6 +105,7 @@ const MainLogin = () => {
 
       <View style={styles.socialStyle}>
         <TouchableOpacity
+          onPress={googleSignIn}
           style={{
             borderWidth: 1,
             padding: 12,
@@ -67,9 +115,11 @@ const MainLogin = () => {
           <GoogleIcon />
         </TouchableOpacity>
 
-        <TouchableOpacity>
-          <AppleIcon />
-        </TouchableOpacity>
+        {Platform.OS === 'ios' && (
+          <TouchableOpacity>
+            <AppleIcon />
+          </TouchableOpacity>
+        )}
       </View>
     </View>
   );
