@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "944614748648",
+    "project_id": "sezun-f5c91",
+    "storage_bucket": "sezun-f5c91.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:944614748648:android:f091c11cb3404d4b15f45d",
+        "android_client_info": {
+          "package_name": "com.seezun"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "944614748648-u4p560c1092rh3tmkj1fcovbll90i3hs.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.seezun",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "944614748648-lsil2act9g6sjvsfmtbs1kv694fehske.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBok7jTh8atLmA5t9M0ILHJYYhpjnTK83A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "944614748648-lsil2act9g6sjvsfmtbs1kv694fehske.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,6 +1,8 @@
 const Color = {
     white: 'white',
     primaryColor:'#BD1818',
+    tertiaryColor: '#FAF7F0',
+    borderColor:'#E5E5E5'
 };
 
 const TextColor = {

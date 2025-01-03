@@ -1,9 +1,19 @@
 import * as React from "react";
 import Svg, { Path } from "react-native-svg";
-const Logo = () => (
+
+
+type props ={
+    width:number,
+    height:number
+}
+
+
+const Logo = ({width,height}:props) => (
     <Svg
-        width={193}
-        height={64}
+        // width={193}
+        // height={64}
+        width={width}
+        height={height}
         viewBox="0 0 193 64"
         fill="none"
     >

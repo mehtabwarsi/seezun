@@ -13,11 +13,11 @@ import {
 import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamList} from '../../../Navigation';
-import AppHeader from '../../../Components/AppHeader';
-import FormTextInput from '../../../Components/FormTextInput';
-import PrimaryButton from '../../../Components/PrimaryButton';
 import {Color, TextColor} from '../../../Theme/color';
 import {Fonts} from '../../../Theme/fonts';
+import AppHeader from '../../../Components/common/AppHeader';
+import FormTextInput from '../../../Components/common/FormTextInput';
+import PrimaryButton from '../../../Components/common/PrimaryButton';
 
 const UserNameScreen = () => {
   const navigation =
@@ -25,30 +25,35 @@ const UserNameScreen = () => {
 
   const [username, setUserName] = useState<string>('');
   const [error, setError] = useState<string>('');
-  const [btnDisable, setBtnDisable] = useState<boolean>(false);
+  const [btnDisable, setBtnDisable] = useState<boolean>(true);
 
-  console.log(username);
-  const handleUsername = (text: string) => {
-    const validUsername = text.replace(/[^a-zA-Z0-9]/g, '');
-    if (validUsername) {
-      setUserName(validUsername);
-      setBtnDisable(false);
-    } else {
+
+  const validateUsername = (text: string) => {
+    const sanitizedText = text.replace(/\s/g, '');
+    const regex = /^[a-zA-Z]*$/; 
+    
+    if (!regex.test(sanitizedText)) {
+      setError('Only alphabetical characters are allowed. No spaces or numbers.');
       setBtnDisable(true);
+    } else {
+      setError('');
+      setBtnDisable(false);
     }
-  };
-
-  const onSubmit = () => {
-    console.log(`username:${username}`);
+    
+    setUserName(sanitizedText);
   };
 
   return (
     <KeyboardAvoidingView
       style={{flex: 1}}
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      keyboardVerticalOffset={Platform.OS === 'ios' ? 100 : 0}>
+      keyboardVerticalOffset={Platform.OS === 'ios' ? 100 : 0}
+      >
       <ScrollView
-        contentContainerStyle={{flexGrow: 1, backgroundColor: Color.white}}>
+        contentContainerStyle={{flexGrow: 1, backgroundColor: Color.white}}
+        keyboardShouldPersistTaps={'always'}
+        automaticallyAdjustKeyboardInsets={true}
+        >
         <AppHeader
           HeaderIcon={'backButton'}
           onHeaderIconButtonPress={() => navigation.replace('mobileSignUp')}
@@ -64,10 +69,11 @@ const UserNameScreen = () => {
             <FormTextInput
               inputValue={username}
               style={styles.mobileInput}
-              onChangeText={handleUsername}
+              onChangeText={validateUsername}
               // error={true}
               // errorText={error}
             />
+            {error ? <Text style={styles.errorText}>{error}</Text> : null}
           </View>
 
           <View style={styles.subTextContainer}>
@@ -88,7 +94,7 @@ const UserNameScreen = () => {
             ButtonTextColor={Color.white}
             size={'large'}
             disable={btnDisable}
-            onPress={() => navigation.push('addDetails')}
+            onPress={() => navigation.push('createPassword')}
           />
         </View>
       </ScrollView>
@@ -150,5 +156,10 @@ const styles = StyleSheet.create({
     fontSize: 12,
     lineHeight: 17,
     color: '#8E8E8E',
+  },
+  errorText: {
+    fontSize: 12,
+    color: 'red',
+    marginTop: 4,
   },
 });

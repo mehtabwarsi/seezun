@@ -8,17 +8,20 @@ import {
   Platform,
   ScrollView,
   TouchableOpacity,
+  Keyboard,
+  Alert,
 } from 'react-native';
 
 import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import { RootStackParamList } from '../../../Navigation';
-import AppHeader from '../../../Components/AppHeader';
-import FormTextInput from '../../../Components/FormTextInput';
-import PrimaryButton from '../../../Components/PrimaryButton';
-import { Color, TextColor } from '../../../Theme/color';
-import { Fonts } from '../../../Theme/fonts';
-
+import {RootStackParamList} from '../../../Navigation';
+import {Color, TextColor} from '../../../Theme/color';
+import {Fonts} from '../../../Theme/fonts';
+import AppHeader from '../../../Components/common/AppHeader';
+import PrimaryButton from '../../../Components/common/PrimaryButton';
+import FormTextInput from '../../../Components/common/FormTextInput';
+import axios, {isAxiosError} from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const EmailLogin = () => {
   const navigation =
@@ -30,7 +33,7 @@ const EmailLogin = () => {
   const [btnDisable, setBtnDisable] = useState<boolean>(false);
 
   useEffect(() => {
-    if (email && pass) {
+    if (email && pass && error == '') {
       setBtnDisable(false);
     } else {
       setBtnDisable(true);
@@ -45,14 +48,58 @@ const EmailLogin = () => {
     return unSubsribe;
   }, [navigation]);
 
+  const authFetch = async () => {
+    try {
+      const authResponse = await axios.post(
+        'https://api.escuelajs.co/api/v1/auth/login',
+        {
+          email: email,
+          password: pass,
+        },
+      );
+      const {access_token, refresh_token} = authResponse.data;
+
+      if (access_token && refresh_token) {
+        await AsyncStorage.setItem('access_token', access_token);
+        await AsyncStorage.setItem('refresh_token', refresh_token);
+      }
+      if (authResponse.status === 201) {
+        navigation.navigate('verifyOtp', {email, screen: 'emailLogin'});
+      } else {
+        Alert.alert(`Error: ${authResponse.status}`);
+      }
+    } catch (error) {
+      if (isAxiosError(error)) {
+        if (error.response?.status === 401) {
+          Alert.alert(
+            error.response.data.message,
+            error.response.status.toString(),
+          );
+        }
+      }
+    }
+  };
 
   const handleOnChange = (text: string) => {
+    const sanitizedText = text.replace(/\s/g, '');
+    setEmail(sanitizedText);
+  };
+
+  const handleOnBlur = () => {
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-    setEmail(text);
-    if (emailRegex.test(text)) {
-      setError('');
+    if (!emailRegex.test(email)) {
+      setError('Invalid email format');
     } else {
-      setError('Invalid email');
+      setError('');
+    }
+  };
+
+  const onSubmit = () => {
+    Keyboard.dismiss();
+    if (email === '' || pass === '') {
+      setError('All fields are required');
+    } else {
+      authFetch();
     }
   };
 
@@ -62,7 +109,8 @@ const EmailLogin = () => {
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       keyboardVerticalOffset={Platform.OS === 'ios' ? 100 : 0}>
       <ScrollView
-        contentContainerStyle={{flexGrow: 1, backgroundColor: Color.white}}>
+        contentContainerStyle={{flexGrow: 1, backgroundColor: Color.white}}
+        keyboardShouldPersistTaps="always">
         <AppHeader
           HeaderIcon={'backButton'}
           onHeaderIconButtonPress={() => navigation.pop()}
@@ -82,6 +130,7 @@ const EmailLogin = () => {
               keyboardType={'email-address'}
               onChangeText={handleOnChange}
               error={true}
+              onBlur={handleOnBlur}
               errorText={error}
             />
             <FormTextInput
@@ -96,7 +145,7 @@ const EmailLogin = () => {
 
           <TouchableOpacity
             style={styles.forgetPass}
-            onPress={() => navigation.push('emailLogin')}>
+            onPress={() => navigation.push('forgotScreen')}>
             <Text style={styles.passloginText}>Forgot Password?</Text>
           </TouchableOpacity>
 
@@ -115,7 +164,7 @@ const EmailLogin = () => {
             ButtonTextColor={Color.white}
             size={'large'}
             disable={btnDisable}
-            onPress={() => console.log('email login')}
+            onPress={onSubmit}
           />
         </View>
       </ScrollView>

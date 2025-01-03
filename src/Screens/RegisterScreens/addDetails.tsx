@@ -8,28 +8,33 @@ import {
   Platform,
   ScrollView,
   TouchableOpacity,
+  Image,
 } from 'react-native';
 
 import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import { RootStackParamList } from '../../Navigation';
-import AppHeader from '../../Components/AppHeader';
-import { Color, TextColor } from '../../Theme/color';
-import FormTextInput from '../../Components/FormTextInput';
-import PrimaryButton from '../../Components/PrimaryButton';
-import { Fonts } from '../../Theme/fonts';
-
-
+import {RootStackParamList} from '../../Navigation';
+import {Color, TextColor} from '../../Theme/color';
+import {Fonts, FontSize} from '../../Theme/fonts';
+import PrimaryButton from '../../Components/common/PrimaryButton';
+import FormTextInput from '../../Components/common/FormTextInput';
+import AppHeader from '../../Components/common/AppHeader';
 
 const AddDetails = () => {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
-
+  
+  const [name,setName] = useState<string>('')  
   const [email, setEmail] = useState<string>('');
   const [pass, setPass] = useState<string>('');
   const [error, setError] = useState<string>('');
   const [btnDisable, setBtnDisable] = useState<boolean>(false);
+  
 
+  const handleOnChange = (text: string) => {
+    const sanitizedText = text.replace(/\s/g, '');
+    setName(sanitizedText);
+  };
 
   return (
     <KeyboardAvoidingView
@@ -37,7 +42,9 @@ const AddDetails = () => {
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       keyboardVerticalOffset={Platform.OS === 'ios' ? 100 : 0}>
       <ScrollView
-        contentContainerStyle={{flexGrow: 1, backgroundColor: Color.white}}>
+        contentContainerStyle={{flexGrow: 1, backgroundColor: Color.white}}
+        keyboardShouldPersistTaps="always"
+        >
         <AppHeader
           HeaderIcon={'backButton'}
           onHeaderIconButtonPress={() => navigation.pop()}
@@ -47,30 +54,47 @@ const AddDetails = () => {
           <View style={styles.textContainer}>
             <Text style={styles.login}>Add details</Text>
           </View>
-
           <View style={styles.textFields}>
             <FormTextInput
-              inputValue={email}
+              inputValue={name}
               style={styles.mobileInput}
               keyboardType={'email-address'}
-              // onChangeText={handleOnChange}
+              onChangeText={handleOnChange}
               error={true}
               errorText={error}
               lable={'Name'}
             />
+            <Text
+              style={{
+                marginRight: 300,
+              }}>
+              Phone
+            </Text>
+            <View style={styles.mobileContryCode}>
+              <View style={styles.countryCodeBox}>
+                <Image
+                  style={styles.flag}
+                  source={require('../../assets/pngs/englandflag.png')}
+                />
+                <Text style={styles.numberCode}>+44</Text>
+              </View>
+              <FormTextInput
+                style={styles.mobileContry}
+                hintText={'Mobile number'}
+                keyboardType={'phone-pad'}
+                maxLength={10}
+                error={true}
+                errorText={error}
+              />
+            </View>
             <FormTextInput
-              inputValue={pass}
-              style={styles.mobileInput}
-              keyboardType={'default'}
-              onChangeText={setPass}
-              lable={'Email'}
-            />
-             <FormTextInput
               inputValue={pass}
               style={styles.mobileInput}
               keyboardType={'default'}
               onChangeText={setPass}
               lable={'Date of birth'}
+              calenderIcon={true}
+              hintText="DD/MM/YYYY"
             />
           </View>
         </View>
@@ -83,7 +107,7 @@ const AddDetails = () => {
             ButtonTextColor={Color.white}
             size={'large'}
             disable={btnDisable}
-            onPress={() => console.log('email login')}
+            onPress={() => navigation.navigate('bottomTab',{screen:'Home'})}
           />
         </View>
       </ScrollView>
@@ -91,7 +115,7 @@ const AddDetails = () => {
   );
 };
 
-export default AddDetails
+export default AddDetails;
 
 const styles = StyleSheet.create({
   container: {
@@ -104,9 +128,10 @@ const styles = StyleSheet.create({
   },
   textContainer: {},
   login: {
-    fontSize: 24,
+    fontSize: FontSize.L,
     fontFamily: Fonts.TensoreFont,
     fontWeight: '400',
+    marginLeft:10
   },
   subTitle: {
     fontSize: 14,
@@ -116,8 +141,23 @@ const styles = StyleSheet.create({
   textFields: {
     marginTop: 14,
     rowGap: 16,
-    justifyContent:'center',
-    alignItems:'center'
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  mobileContryCode: {
+    flexDirection: 'row',
+    gap: 20,
+  },
+  mobileContry: {
+    width: Dimensions.get('window').width / 1.2 - 100,
+  },
+  numberCode: {
+    fontSize: 16,
+    fontFamily: Fonts.Gotham,
+  },
+  flag: {
+    width: 24,
+    height: 17,
   },
   mobileInput: {
     width: Dimensions.get('window').width / 1.2,
@@ -139,5 +179,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: 30,
     marginBottom: 30,
+  },
+  countryCodeBox: {
+    width: 84,
+    height: 56,
+    // backgroundColor: 'red',
+    borderWidth: 1,
+    borderColor: '#D2D2D2',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 8,
   },
 });
