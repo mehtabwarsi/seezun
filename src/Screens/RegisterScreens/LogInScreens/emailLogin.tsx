@@ -8,6 +8,8 @@ import {
   Platform,
   ScrollView,
   TouchableOpacity,
+  Keyboard,
+  Alert,
 } from 'react-native';
 
 import {useNavigation} from '@react-navigation/native';
@@ -18,6 +20,8 @@ import {Fonts} from '../../../Theme/fonts';
 import AppHeader from '../../../Components/common/AppHeader';
 import PrimaryButton from '../../../Components/common/PrimaryButton';
 import FormTextInput from '../../../Components/common/FormTextInput';
+import axios, {isAxiosError} from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const EmailLogin = () => {
   const navigation =
@@ -44,6 +48,38 @@ const EmailLogin = () => {
     return unSubsribe;
   }, [navigation]);
 
+  const authFetch = async () => {
+    try {
+      const authResponse = await axios.post(
+        'https://api.escuelajs.co/api/v1/auth/login',
+        {
+          email: email,
+          password: pass,
+        },
+      );
+      const {access_token, refresh_token} = authResponse.data;
+
+      if (access_token && refresh_token) {
+        await AsyncStorage.setItem('access_token', access_token);
+        await AsyncStorage.setItem('refresh_token', refresh_token);
+      }
+      if (authResponse.status === 201) {
+        navigation.navigate('verifyOtp', {email, screen: 'emailLogin'});
+      } else {
+        Alert.alert(`Error: ${authResponse.status}`);
+      }
+    } catch (error) {
+      if (isAxiosError(error)) {
+        if (error.response?.status === 401) {
+          Alert.alert(
+            error.response.data.message,
+            error.response.status.toString(),
+          );
+        }
+      }
+    }
+  };
+
   const handleOnChange = (text: string) => {
     const sanitizedText = text.replace(/\s/g, '');
     setEmail(sanitizedText);
@@ -59,10 +95,11 @@ const EmailLogin = () => {
   };
 
   const onSubmit = () => {
+    Keyboard.dismiss();
     if (email === '' || pass === '') {
       setError('All fields are required');
     } else {
-      navigation.navigate('verifyOtp', {email, screen: 'emailLogin'});
+      authFetch();
     }
   };
 
@@ -73,8 +110,7 @@ const EmailLogin = () => {
       keyboardVerticalOffset={Platform.OS === 'ios' ? 100 : 0}>
       <ScrollView
         contentContainerStyle={{flexGrow: 1, backgroundColor: Color.white}}
-        keyboardShouldPersistTaps="always"
-        >
+        keyboardShouldPersistTaps="always">
         <AppHeader
           HeaderIcon={'backButton'}
           onHeaderIconButtonPress={() => navigation.pop()}

@@ -28,8 +28,8 @@ const MobileLogin = () => {
 
   const [phone, setPhone] = useState<string>('');
   const [error, setError] = useState<string>('');
-  const [confiramtion ,setConfirmation] = useState(null)
-   
+  const [confiramtion, setConfirmation] = useState(null);
+
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
       setPhone('');
@@ -59,18 +59,24 @@ const MobileLogin = () => {
   const onSubmit = async (phoneNumber: string): Promise<void> => {
     validatePhone();
     if (phone.length === 10) {
-      try {
-        const confirmation = await auth().signInWithPhoneNumber(
-          `+91${phoneNumber}`,
-        );
-        setConfirmation(confiramtion)
+      navigation.navigate('verifyOtp', {
+        phone,
+        otpConfirmData: confiramtion,
+        screen: 'mobileLogin',
+      });
 
-        if (confirmation?.verificationId != null) {
-          navigation.navigate('verifyOtp', {phone,otpConfirmData:confiramtion, screen: 'mobileLogin'});
-        }
-      } catch (err) {
-        console.log(`err:${err}`);
-      }
+      // try {
+      //   const confirmation = await auth().signInWithPhoneNumber(
+      //     `+91${phoneNumber}`,
+      //   );
+      //   setConfirmation(confiramtion)
+
+      //   if (confirmation?.verificationId != null) {
+      //     navigation.navigate('verifyOtp', {phone,otpConfirmData:confiramtion, screen: 'mobileLogin'});
+      //   }
+      // } catch (err) {
+      //   console.log(`err:${err}`);
+      // }
     }
   };
 

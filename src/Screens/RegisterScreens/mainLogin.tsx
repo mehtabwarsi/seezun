@@ -26,6 +26,7 @@ import {
   isSuccessResponse,
   isNoSavedCredentialFoundResponse,
 } from '@react-native-google-signin/google-signin';
+;
 
 const MainLogin = () => {
   const navigation =
@@ -49,10 +50,10 @@ const MainLogin = () => {
 
       if (isSuccessResponse(response)) {
         setUserData(response.data);
-        console.log(response)
+        console.log(response);
       }
     } catch (error) {
-      console.log(error)
+      console.log(error);
       if (isErrorWithCode(error)) {
         switch (error.code) {
           case statusCodes.IN_PROGRESS:
@@ -65,6 +66,8 @@ const MainLogin = () => {
       }
     }
   };
+
+
 
   return (
     <View style={styles.container}>

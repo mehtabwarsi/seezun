@@ -1,8 +1,8 @@
+import React, {useEffect, useState} from 'react';
 import {
   Dimensions,
   FlatList,
   Image,
-  ImageBackground,
   ScrollView,
   StatusBar,
   StyleSheet,
@@ -10,7 +10,6 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React from 'react';
 import {Color, TextColor} from '../../Theme/color';
 import Logo from '../../assets/svgIcons/logo';
 import IcBell from '../../assets/svgIcons/IcBell';
@@ -18,15 +17,19 @@ import IcSaved from '../../assets/svgIcons/IcSaved';
 import IcCart from '../../assets/svgIcons/IcCart';
 import {Fonts, FontSize} from '../../Theme/fonts';
 import CatogoryCardView from '../../Components/featureX/catogoryCardView';
-import {data, data2} from '../../tempData';
+import {data} from '../../tempData';
 import ProductCardView from '../../Components/featureX/productCardView';
-import HowToWear from '../../Components/featureX/homeScreenComponets/howWear';
 import FreshFromToday from '../../Components/featureX/homeScreenComponets/freshFromToday';
-import IcPlay from '../../assets/svgIcons/IcPlay';
-import Video from 'react-native-video';
 import VideoPlay from '../../Components/featureX/homeScreenComponets/VideoPlay';
+import {HttpMethod} from '../../constant';
+import {useIsFocused} from '@react-navigation/native';
+import axios from 'axios';
+import {Config} from '../../config';
 
 const HomeScreen = () => {
+  const [categoryData, setCategoryData] = useState<Array<any>>([]);
+  const [loading, setLoading] = useState<boolean>(false);
+
   return (
     <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
       <StatusBar barStyle={'light-content'} backgroundColor={'white'} />
@@ -206,7 +209,7 @@ const HomeScreen = () => {
               height: 500,
               marginBottom: 20,
             }}>
-            <VideoPlay/>
+            <VideoPlay />
           </View>
           {/* fresh from today  */}
 
